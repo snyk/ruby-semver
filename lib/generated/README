@@ -1,0 +1,5 @@
+This directory contains JavaScript that has been generated using http://opalrb.org/.
+
+IT SHOULD NOT BE EDITED BY HAND!
+
+To make changes, edit /ruby-src and recompile using `npm run compile-ruby`.

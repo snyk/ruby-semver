@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+SCRIPT_DIR=$(cd $(dirname "$0") && pwd)
+cd "$SCRIPT_DIR/.."
+
+if ! bundle check > /dev/null; then
+  echo 'Installing dependencies...'
+  bundle install
+fi
+
+set -e
+
+printf 'Compiling ruby-src to "/lib/generated/rubygems.js"...'
+
+bundle exec opal --compile --include=./ruby-src -- ./ruby-src/rubygems.rb  > ./lib/generated/rubygems.js
+
+echo ' done'
