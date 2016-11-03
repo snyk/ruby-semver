@@ -6,7 +6,10 @@ import { validRange } from '../../';
 
 test('validRange(range)', t => {
   t.is(validRange('1.1'), '= 1.1');
-  t.is(validRange('~> 1.1.0'), '~> 1.1.0');
+  t.is(validRange('~> 1.1'), '< 2, >= 1.1');
+  t.is(validRange('~> 1.1.0'), '< 1.2, >= 1.1.0');
+  t.is(validRange('~> 1.1.1.0'), '< 1.1.2, >= 1.1.1.0');
+  t.is(validRange('~> 1.1.1.beta.1'), '< 1.2, >= 1.1.1.beta.1');
   t.is(validRange('> 2.1, < 2.4'), '< 2.4, > 2.1');
 
   t.is(validRange(''), '>= 0');
