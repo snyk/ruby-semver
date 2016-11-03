@@ -1,7 +1,6 @@
 const api = {};
 
-Object.assign(api, require('./lib/comparison'));
-Object.assign(api, require('./lib/ranges'));
-Object.assign(api, require('./lib/functions'));
-
-module.exports = api;
+module.exports = Object.assign(api,
+                               require('./lib/comparison'),
+                               require('./lib/ranges'),
+                               require('./lib/functions'));
