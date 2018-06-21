@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'opal'
+gem 'opal', '>= 0.10.2'
