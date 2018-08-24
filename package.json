@@ -4,14 +4,12 @@
   "main": "index.js",
   "scripts": {
     "compile-ruby": "scripts/compile-ruby",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "ava --verbose"
   },
   "author": "Gareth Visagie <gareth@snyk.io>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "ava": "^0.16.0",
-    "semantic-release": "^4.3.5"
+    "ava": "^0.25.0"
   },
   "repository": {
     "type": "git",

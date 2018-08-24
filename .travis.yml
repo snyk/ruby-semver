@@ -9,5 +9,16 @@ notifications:
 node_js:
   - 6
   - 8
-after_success:
-  - npm run semantic-release
+install:
+  - npm install
+script:
+  - npm test
+jobs:
+  include:
+    - stage: Release
+      node_js: "8"
+      script:
+      - test "${TRAVIS_PULL_REQUEST}" != "false" || npx semantic-release
+branches:
+  only:
+    - "master"
