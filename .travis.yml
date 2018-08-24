@@ -7,7 +7,7 @@ notifications:
   email: false
   slack: snyk:5hknLE8muATMpE75TgeVFZzz
 node_js:
-  - 4
   - 6
+  - 8
 after_success:
   - npm run semantic-release
