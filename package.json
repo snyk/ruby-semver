@@ -16,7 +16,7 @@
     "url": "https://github.com/Snyk/ruby-semver.git"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=8"
   },
   "dependencies": {
     "lodash": "^4.17.14"
