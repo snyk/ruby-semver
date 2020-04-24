@@ -8,6 +8,7 @@ notifications:
   email: false
   slack: snyk:5hknLE8muATMpE75TgeVFZzz
 node_js:
+  - 8
   - 10
   - 12
 install:
