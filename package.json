@@ -19,6 +19,6 @@
     "node": ">=8"
   },
   "dependencies": {
-    "lodash": "^4.17.14"
+    "@snyk/lodash": "4.17.15-patch"
   }
 }
