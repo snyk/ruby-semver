@@ -19,6 +19,8 @@
     "node": ">=8"
   },
   "dependencies": {
-    "@snyk/lodash": "4.17.15-patch"
+    "lodash.escaperegexp": "^4.1.2",
+    "lodash.flatten": "^4.4.0",
+    "lodash.uniq": "^4.5.0"
   }
 }
