@@ -91,7 +91,7 @@ export class GemRequirement {
     if (requirements.length === 0) {
       this.requirements = [DefaultRequirement];
     } else {
-      this.requirements = requirements.map(GemRequirement.parse);
+      this.requirements = requirements.map((req) => GemRequirement.parse(req));
     }
   }
 
