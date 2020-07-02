@@ -8,13 +8,18 @@
     "format": "prettier --write 'lib/**/*.?s' 'test/**/*.?s'",
     "prepare": "npm run build",
     "build": "tsc",
+    "lint": "eslint 'lib/**/*.?s'",
     "test": "ava --verbose"
   },
   "author": "Gareth Visagie <gareth@snyk.io>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@ava/babel": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
     "ava": "^3.9.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
     "prettier": "^2.0.5",
     "typescript": "~3.8.3"
   },
