@@ -1,4 +1,4 @@
-import GemVersion = require('./ruby/gem-version');
+import { GemVersion } from './ruby/gem-version';
 
 export { gt, gte, lt, lte, eq, neq, cmp, compare, rcompare, diff };
 

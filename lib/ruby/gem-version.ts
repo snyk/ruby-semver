@@ -152,7 +152,7 @@ const VERSION_PATTERN =
   '[0-9]+(.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(.[0-9A-Za-z-]+)*)?';
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
-class GemVersion {
+export class GemVersion {
   version: string;
   _release;
   _isPrerelease;
@@ -427,5 +427,3 @@ function isNumber(val) {
 }
 
 GemVersion.VERSION_PATTERN = VERSION_PATTERN;
-
-export = GemVersion;

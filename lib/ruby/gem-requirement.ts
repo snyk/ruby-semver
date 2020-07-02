@@ -2,7 +2,7 @@ import * as _escapeRegExp from 'lodash.escaperegexp';
 import * as _flatten from 'lodash.flatten';
 import * as _uniq from 'lodash.uniq';
 
-const GemVersion = require('./gem-version');
+import { GemVersion } from './gem-version';
 
 const OPS = {
   '=': (v, r) => v.compare(r) === 0,
@@ -26,7 +26,7 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 // The default requirement matches any version
 const DefaultRequirement = ['>=', new GemVersion(0)];
 
-export = class GemRequirement {
+export class GemRequirement {
   requirements;
 
   // --
@@ -247,4 +247,4 @@ export = class GemRequirement {
   //     end
   //   end
   // end
-};
+}

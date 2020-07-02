@@ -1,5 +1,5 @@
-import GemVersion = require('./ruby/gem-version');
-import GemRequirement = require('./ruby/gem-requirement');
+import { GemVersion } from './ruby/gem-version';
+import { GemRequirement } from './ruby/gem-requirement';
 import { compare, rcompare } from './comparison';
 
 export {

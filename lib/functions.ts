@@ -1,4 +1,4 @@
-import GemVersion = require('./ruby/gem-version');
+import { GemVersion } from './ruby/gem-version';
 
 export { valid, prerelease, major, minor, patch, inc };
 
