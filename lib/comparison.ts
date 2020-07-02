@@ -1,28 +1,28 @@
-import { GemVersion } from './ruby/gem-version';
+import { GemVersion, MaybeGemVersion, Ordering } from './ruby/gem-version';
 
 export { gt, gte, lt, lte, eq, neq, cmp, compare, rcompare, diff };
 
-function gt(v1, v2) {
+function gt(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) > 0;
 }
 
-function gte(v1, v2) {
+function gte(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) >= 0;
 }
 
-function lt(v1, v2) {
+function lt(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) < 0;
 }
 
-function lte(v1, v2) {
+function lte(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) <= 0;
 }
 
-function eq(v1, v2) {
+function eq(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) === 0;
 }
 
-function neq(v1, v2) {
+function neq(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return !eq(v1, v2);
 }
 
@@ -34,7 +34,11 @@ function _strictNeq(v1, v2) {
   return !_strictEq(v1, v2);
 }
 
-function cmp(v1, comparator, v2) {
+function cmp(
+  v1: MaybeGemVersion,
+  comparator: string,
+  v2: MaybeGemVersion,
+): boolean {
   switch (comparator) {
     case '>':
       return gt(v1, v2);
@@ -57,15 +61,21 @@ function cmp(v1, comparator, v2) {
   }
 }
 
-function compare(v1, v2) {
+function compare(
+  v1: MaybeGemVersion,
+  v2: MaybeGemVersion,
+): Ordering | undefined {
   return GemVersion.create(v1).compare(GemVersion.create(v2));
 }
 
-function rcompare(v1, v2) {
+function rcompare(
+  v1: MaybeGemVersion,
+  v2: MaybeGemVersion,
+): Ordering | undefined {
   return GemVersion.create(v2).compare(GemVersion.create(v1));
 }
 
-function diff(v1, v2) {
+function diff(v1: MaybeGemVersion, v2: MaybeGemVersion): string | null {
   if (eq(v1, v2)) {
     return null;
   }

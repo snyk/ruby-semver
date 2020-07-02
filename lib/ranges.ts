@@ -1,4 +1,4 @@
-import { GemVersion } from './ruby/gem-version';
+import { GemVersion, MaybeGemVersion } from './ruby/gem-version';
 import { GemRequirement } from './ruby/gem-requirement';
 import { compare, rcompare } from './comparison';
 
@@ -13,23 +13,23 @@ export {
   outside,
 };
 
-const gtr = () => {
+const gtr = (): never => {
   throw new Error('Not implemented');
 };
 
-const ltr = () => {
+const ltr = (): never => {
   throw new Error('Not implemented');
 };
 
-const outside = () => {
+const outside = (): never => {
   throw new Error('Not implemented');
 };
 
-function _createRequirement(range) {
+function _createRequirement(range: string): GemRequirement {
   return GemRequirement.create(range.split(','));
 }
 
-function _expandTildes(gemRequirement) {
+function _expandTildes(gemRequirement: GemRequirement) {
   const requirements: string[] = [];
   gemRequirement.requirements.forEach((req) => {
     const op = req[0];
@@ -44,7 +44,7 @@ function _expandTildes(gemRequirement) {
   return GemRequirement.create(requirements);
 }
 
-function validRange(range) {
+function validRange(range: string): string | null {
   if (range === null || range === undefined) {
     return null;
   }
@@ -63,7 +63,7 @@ function validRange(range) {
   }
 }
 
-function satisfies(version, range) {
+function satisfies(version: MaybeGemVersion, range: string): boolean {
   try {
     return _createRequirement(range).satisfiedBy(GemVersion.create(version));
   } catch (err) {
@@ -71,7 +71,11 @@ function satisfies(version, range) {
   }
 }
 
-function _firstSatisfying(versions, range, compareFunction) {
+function _firstSatisfying(
+  versions: MaybeGemVersion[],
+  range: string,
+  compareFunction,
+): string {
   const requirement = _createRequirement(range);
   const maxSatisfying = versions
     .map((v) => GemVersion.create(v))
@@ -80,15 +84,15 @@ function _firstSatisfying(versions, range, compareFunction) {
   return maxSatisfying ? maxSatisfying.toString() : null;
 }
 
-function maxSatisfying(versions, range) {
+function maxSatisfying(versions: MaybeGemVersion[], range: string): string {
   return _firstSatisfying(versions, range, rcompare);
 }
 
-function minSatisfying(versions, range) {
+function minSatisfying(versions: MaybeGemVersion[], range: string): string {
   return _firstSatisfying(versions, range, compare);
 }
 
-function intersects(r1, r2) {
+function intersects(r1: string, r2: string): boolean {
   try {
     const range1 = _expandTildes(_createRequirement(r1));
     const range2 = _expandTildes(_createRequirement(r2));
@@ -100,7 +104,7 @@ function intersects(r1, r2) {
   }
 }
 
-function intersectLeftRight(leftRange, rightRange) {
+function intersectLeftRight(leftRange, rightRange): boolean {
   for (const [op, version] of leftRange.requirements) {
     if (op === '!=') {
       continue;

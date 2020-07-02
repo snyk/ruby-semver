@@ -26,8 +26,10 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 // The default requirement matches any version
 const DefaultRequirement = ['>=', new GemVersion(0)];
 
+type MaybeGemRequirement = GemRequirement | string | Array<MaybeGemRequirement>;
+
 export class GemRequirement {
-  requirements;
+  requirements: Array<unknown>;
 
   // --
   // Factory method to create a GemRequirement object.  Input may be
@@ -35,7 +37,7 @@ export class GemRequirement {
   //
   // If the input is "weird", the default version requirement is
   // returned.
-  static create(input) {
+  static create(input: MaybeGemRequirement) {
     if (input instanceof GemRequirement) {
       return input;
     }
@@ -83,7 +85,7 @@ export class GemRequirement {
   // requirements are ignored. An empty set of +requirements+ is the
   // same as <tt>">= 0"</tt>.
 
-  constructor(...requirements) {
+  constructor(...requirements: MaybeGemRequirement[]) {
     requirements = _uniq(_flatten(requirements)).filter(Boolean);
 
     if (requirements.length === 0) {
@@ -204,7 +206,7 @@ export class GemRequirement {
   // requirements.all? { |op, rv| (OPS[op] || OPS["="]).call version, rv }
   // end
 
-  satisfiedBy(version) {
+  satisfiedBy(version: GemVersion): boolean {
     if (!(version instanceof GemVersion)) {
       throw new Error(`Need a GemVersion: ${version}`);
     }

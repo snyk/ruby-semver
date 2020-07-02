@@ -152,6 +152,9 @@ const VERSION_PATTERN =
   '[0-9]+(.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(.[0-9A-Za-z-]+)*)?';
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
+export type MaybeGemVersion = GemVersion | string;
+export type Ordering = 1 | 0 | -1;
+
 export class GemVersion {
   version: string;
   _release;
@@ -183,7 +186,7 @@ export class GemVersion {
   //   ver2 = Version.create(ver1)       // -> (ver1)
   //   ver3 = Version.create(nil)        // -> nil
 
-  static create(input): GemVersion | undefined {
+  static create(input: MaybeGemVersion): GemVersion | undefined {
     if (input instanceof GemVersion) {
       return input;
     }
@@ -367,7 +370,7 @@ export class GemVersion {
   // one. Attempts to compare to something that's not a
   // <tt>GemVersion</tt> return +nil+.
 
-  compare(other) {
+  compare(other): Ordering | undefined {
     if (!(other instanceof GemVersion)) {
       return undefined;
     }

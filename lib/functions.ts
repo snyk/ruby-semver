@@ -1,12 +1,14 @@
-import { GemVersion } from './ruby/gem-version';
+import { GemVersion, MaybeGemVersion } from './ruby/gem-version';
 
 export { valid, prerelease, major, minor, patch, inc };
 
-const inc = () => {
+type Segment = string | number;
+
+const inc = (): never => {
   throw new Error('Not implemented');
 };
 
-function valid(v) {
+function valid(v: MaybeGemVersion): string | null {
   if (!v) {
     return null;
   }
@@ -18,7 +20,7 @@ function valid(v) {
   }
 }
 
-function prerelease(v) {
+function prerelease(v: MaybeGemVersion): Segment[] | null {
   try {
     const version = GemVersion.create(v);
     if (version.isPrerelease()) {
@@ -35,7 +37,7 @@ function prerelease(v) {
   }
 }
 
-function _segmentAt(v, index) {
+function _segmentAt(v, index): Segment | null {
   try {
     const segment = GemVersion.create(v).getSegments()[index];
     return segment === undefined ? null : segment;
@@ -44,14 +46,14 @@ function _segmentAt(v, index) {
   }
 }
 
-function major(v) {
+function major(v: MaybeGemVersion): Segment | null {
   return _segmentAt(v, 0);
 }
 
-function minor(v) {
+function minor(v: MaybeGemVersion): Segment | null {
   return _segmentAt(v, 1);
 }
 
-function patch(v) {
+function patch(v: MaybeGemVersion): Segment | null {
   return _segmentAt(v, 2);
 }
