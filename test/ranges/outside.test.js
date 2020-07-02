@@ -9,6 +9,10 @@ import { outside } from '../../';
 // must be either the string '>' or '<'.
 
 test('ltr(version, range): not implemented', (t) => {
-  t.throws(() => outside('1.1.2', '> 0.2, < 2.3', '>'), 'Not implemented');
-  t.throws(() => outside('1.1.2', '> 0.2, < 2.3', '<'), 'Not implemented');
+  t.throws(() => outside('1.1.2', '> 0.2, < 2.3', '>'), {
+    message: 'Not implemented',
+  });
+  t.throws(() => outside('1.1.2', '> 0.2, < 2.3', '<'), {
+    message: 'Not implemented',
+  });
 });

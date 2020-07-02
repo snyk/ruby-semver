@@ -8,5 +8,5 @@ import { ltr } from '../../';
 // possible in the range.
 
 test('ltr(version, range): not implemented', (t) => {
-  t.throws(() => ltr('1.1.2', '> 0.2, < 2.3'), 'Not implemented');
+  t.throws(() => ltr('1.1.2', '> 0.2, < 2.3'), { message: 'Not implemented' });
 });

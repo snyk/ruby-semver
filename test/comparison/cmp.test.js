@@ -56,7 +56,13 @@ test('cmp(v1, "!==", v2)', (t) => {
 });
 
 test('cmp(v1, "nonsense", v2)', (t) => {
-  t.throws(() => cmp('2', 'nonsense', '2'), 'Invalid comparator: nonsense');
-  t.throws(() => cmp('2', '!====', '2'), 'Invalid comparator: !====');
-  t.throws(() => cmp('2', '>broken', '2'), 'Invalid comparator: >broken');
+  t.throws(() => cmp('2', 'nonsense', '2'), {
+    message: 'Invalid comparator: nonsense',
+  });
+  t.throws(() => cmp('2', '!====', '2'), {
+    message: 'Invalid comparator: !====',
+  });
+  t.throws(() => cmp('2', '>broken', '2'), {
+    message: 'Invalid comparator: >broken',
+  });
 });

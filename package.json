@@ -10,7 +10,8 @@
   "author": "Gareth Visagie <gareth@snyk.io>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "ava": "^0.25.0",
+    "@ava/babel": "^1.0.1",
+    "ava": "^3.9.0",
     "prettier": "^2.0.5"
   },
   "repository": {
@@ -19,6 +20,9 @@
   },
   "engines": {
     "node": ">=8"
+  },
+  "ava": {
+    "babel": true
   },
   "dependencies": {
     "lodash.escaperegexp": "^4.1.0",

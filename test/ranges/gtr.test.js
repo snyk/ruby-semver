@@ -8,5 +8,5 @@ import { gtr } from '../../';
 // possible in the range.
 
 test('gtr(version, range): not implemented', (t) => {
-  t.throws(() => gtr('1.1.2', '> 0.2, < 2.3'), 'Not implemented');
+  t.throws(() => gtr('1.1.2', '> 0.2, < 2.3'), { message: 'Not implemented' });
 });
