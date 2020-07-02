@@ -4,7 +4,7 @@ import { patch } from '../../';
 
 // patch(v): Return the patch version number.
 
-test('patch(v)', t => {
+test('patch(v)', (t) => {
   t.is(patch('1'), null);
   t.is(patch('1.2'), null);
   t.is(patch('1.2.3'), 3);

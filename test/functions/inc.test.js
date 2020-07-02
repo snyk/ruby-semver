@@ -8,7 +8,7 @@ import { inc } from '../../';
 //  - premajor in one call will bump the version up to the next major version and down to a prerelease of that major version. preminor, and prepatch work the same way.
 //  - If called from a non-prerelease version, the prerelease will work the same as prepatch. It increments the patch version, then makes a prerelease. If the input version is already a prerelease it simply increments it.
 
-test('inc(v, release): not implemented', t => {
+test('inc(v, release): not implemented', (t) => {
   t.throws(() => inc('1.1.0', 'major'), 'Not implemented');
   t.throws(() => inc('1.1.0', 'premajor'), 'Not implemented');
   t.throws(() => inc('1.1.0', 'minor'), 'Not implemented');

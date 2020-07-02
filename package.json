@@ -4,12 +4,14 @@
   "main": "index.js",
   "scripts": {
     "compile-ruby": "scripts/compile-ruby",
+    "format": "prettier --write 'lib/**/*.?s' 'test/**/*.?s'",
     "test": "ava --verbose"
   },
   "author": "Gareth Visagie <gareth@snyk.io>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "ava": "^0.25.0"
+    "ava": "^0.25.0",
+    "prettier": "^2.0.5"
   },
   "repository": {
     "type": "git",

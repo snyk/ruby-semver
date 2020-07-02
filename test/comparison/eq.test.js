@@ -2,7 +2,7 @@ import test from 'ava';
 
 import { eq } from '../../';
 
-test('eq(v1, v2): v1 == v2', t => {
+test('eq(v1, v2): v1 == v2', (t) => {
   t.truthy(eq('2', '2'));
   t.truthy(eq('2', '2.0'));
   t.truthy(eq('5.4', '5.4'));

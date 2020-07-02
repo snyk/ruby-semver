@@ -4,7 +4,7 @@ import { satisfies } from '../../';
 
 // satisfies(version, range): Return true if the version satisfies the range.
 
-test('satisfies(version, range)', t => {
+test('satisfies(version, range)', (t) => {
   t.true(satisfies('1.1', '>= 1.1'));
   t.true(satisfies('1.1.5', '~> 1.1.2'));
   t.true(satisfies('1.1.5', '1.1.5'));

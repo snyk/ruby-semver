@@ -2,7 +2,7 @@ import test from 'ava';
 
 import { neq } from '../../';
 
-test('neq(v1, v2): v1 != v2', t => {
+test('neq(v1, v2): v1 != v2', (t) => {
   t.truthy(neq('2', '1'));
   t.truthy(neq('5.4', '5.3'));
   t.truthy(neq('5.0.1', '5.0.0'));
