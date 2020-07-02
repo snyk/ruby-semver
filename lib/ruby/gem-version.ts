@@ -153,6 +153,13 @@ const VERSION_PATTERN =
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
 class GemVersion {
+  version: string;
+  _release;
+  _isPrerelease;
+  _bump;
+
+  static VERSION_PATTERN;
+
   // include Comparable
 
   // -----------------------------
@@ -176,12 +183,12 @@ class GemVersion {
   //   ver2 = Version.create(ver1)       // -> (ver1)
   //   ver3 = Version.create(nil)        // -> nil
 
-  static create(input) {
+  static create(input): GemVersion | undefined {
     if (input instanceof GemVersion) {
       return input;
     }
     if (!input) {
-      return;
+      return undefined;
     }
 
     return new GemVersion(input);
@@ -361,8 +368,8 @@ class GemVersion {
   // <tt>GemVersion</tt> return +nil+.
 
   compare(other) {
-    if (!other instanceof GemVersion) {
-      return;
+    if (!(other instanceof GemVersion)) {
+      return undefined;
     }
     if (other.version === this.version) {
       return 0;
@@ -421,4 +428,4 @@ function isNumber(val) {
 
 GemVersion.VERSION_PATTERN = VERSION_PATTERN;
 
-module.exports = GemVersion;
+export = GemVersion;

@@ -1,10 +1,13 @@
 {
   "name": "@snyk/ruby-semver",
   "description": "node-semver compatible API with RubyGems semantics",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "compile-ruby": "scripts/compile-ruby",
     "format": "prettier --write 'lib/**/*.?s' 'test/**/*.?s'",
+    "prepare": "npm run build",
+    "build": "tsc",
     "test": "ava --verbose"
   },
   "author": "Gareth Visagie <gareth@snyk.io>",
@@ -12,7 +15,8 @@
   "devDependencies": {
     "@ava/babel": "^1.0.1",
     "ava": "^3.9.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "typescript": "~3.8.3"
   },
   "repository": {
     "type": "git",
@@ -27,6 +31,7 @@
   "dependencies": {
     "lodash.escaperegexp": "^4.1.0",
     "lodash.flatten": "^4.4.0",
-    "lodash.uniq": "^4.5.0"
+    "lodash.uniq": "^4.5.0",
+    "tslib": "^1.13.0"
   }
 }

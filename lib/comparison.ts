@@ -1,19 +1,6 @@
-'use strict';
+import GemVersion = require('./ruby/gem-version');
 
-const GemVersion = require('./ruby/gem-version');
-
-module.exports = {
-  gt,
-  gte,
-  lt,
-  lte,
-  eq,
-  neq,
-  cmp,
-  compare,
-  rcompare,
-  diff,
-};
+export { gt, gte, lt, lte, eq, neq, cmp, compare, rcompare, diff };
 
 function gt(v1, v2) {
   return compare(v1, v2) > 0;

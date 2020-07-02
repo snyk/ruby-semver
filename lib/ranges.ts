@@ -1,26 +1,28 @@
-'use strict';
+import GemVersion = require('./ruby/gem-version');
+import GemRequirement = require('./ruby/gem-requirement');
+import { compare, rcompare } from './comparison';
 
-const GemVersion = require('./ruby/gem-version');
-const GemRequirement = require('./ruby/gem-requirement');
-const _comparison = require('./comparison');
-const compare = _comparison.compare;
-const rcompare = _comparison.rcompare;
-
-module.exports = {
+export {
   validRange,
   satisfies,
   maxSatisfying,
   minSatisfying,
   intersects,
-  gtr: () => {
-    throw new Error('Not implemented');
-  },
-  ltr: () => {
-    throw new Error('Not implemented');
-  },
-  outside: () => {
-    throw new Error('Not implemented');
-  },
+  gtr,
+  ltr,
+  outside,
+};
+
+const gtr = () => {
+  throw new Error('Not implemented');
+};
+
+const ltr = () => {
+  throw new Error('Not implemented');
+};
+
+const outside = () => {
+  throw new Error('Not implemented');
 };
 
 function _createRequirement(range) {
@@ -28,7 +30,7 @@ function _createRequirement(range) {
 }
 
 function _expandTildes(gemRequirement) {
-  const requirements = [];
+  const requirements: string[] = [];
   gemRequirement.requirements.forEach((req) => {
     const op = req[0];
     const version = req[1];

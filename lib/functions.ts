@@ -1,14 +1,9 @@
-const GemVersion = require('./ruby/gem-version');
+import GemVersion = require('./ruby/gem-version');
 
-module.exports = {
-  valid,
-  prerelease,
-  major,
-  minor,
-  patch,
-  inc: () => {
-    throw new Error('Not implemented');
-  },
+export { valid, prerelease, major, minor, patch, inc };
+
+const inc = () => {
+  throw new Error('Not implemented');
 };
 
 function valid(v) {
@@ -28,7 +23,9 @@ function prerelease(v) {
     const version = GemVersion.create(v);
     if (version.isPrerelease()) {
       const segments = version.getSegments();
-      const preStartIndex = segments.findIndex((s) => /[a-zA-Z]/.test(s));
+      const preStartIndex = segments.findIndex(
+        (s) => typeof s === 'string' && /[a-zA-Z]/.test(s),
+      );
       return segments.slice(preStartIndex);
     } else {
       return null;

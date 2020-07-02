@@ -1,6 +1,6 @@
-const _escapeRegExp = require('lodash.escaperegexp');
-const _flatten = require('lodash.flatten');
-const _uniq = require('lodash.uniq');
+import * as _escapeRegExp from 'lodash.escaperegexp';
+import * as _flatten from 'lodash.flatten';
+import * as _uniq from 'lodash.uniq';
 
 const GemVersion = require('./gem-version');
 
@@ -26,7 +26,9 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 // The default requirement matches any version
 const DefaultRequirement = ['>=', new GemVersion(0)];
 
-module.exports = class GemRequirement {
+export = class GemRequirement {
+  requirements;
+
   // --
   // Factory method to create a GemRequirement object.  Input may be
   // a Version, a String, or nil.  Intended to simplify client code.
@@ -203,7 +205,7 @@ module.exports = class GemRequirement {
   // end
 
   satisfiedBy(version) {
-    if (!version instanceof GemVersion) {
+    if (!(version instanceof GemVersion)) {
       throw new Error(`Need a GemVersion: ${version}`);
     }
 
