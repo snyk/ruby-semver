@@ -4,7 +4,7 @@ import { major } from '../../';
 
 // major(v): Return the major version number.
 
-test('major(v)', t => {
+test('major(v)', (t) => {
   t.is(major('1'), 1);
   t.is(major('1.2'), 1);
   t.is(major('1.2.3'), 1);

@@ -2,7 +2,7 @@ import test from 'ava';
 
 import { gt } from '../../';
 
-test('gt(v1, v2): v1 > v2', t => {
+test('gt(v1, v2): v1 > v2', (t) => {
   t.truthy(gt('2', '1'));
   t.truthy(gt('5.4', '5.3'));
   t.truthy(gt('5.0.1', '5.0.0'));

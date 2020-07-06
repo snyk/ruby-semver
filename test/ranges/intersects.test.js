@@ -8,12 +8,12 @@ function testIntersects(r1, r2) {
   const res1 = intersects(r1, r2);
   const res2 = intersects(r2, r1);
   if (res1 !== res2) {
-    throw new Error(`Inconsistent result: ${r1} vs. ${r2}`)
+    throw new Error(`Inconsistent result: ${r1} vs. ${r2}`);
   }
   return res1;
 }
 
-test('intersects(range1, range2)', t => {
+test('intersects(range1, range2)', (t) => {
   t.true(testIntersects('1.1', '>= 1.1'));
   t.true(testIntersects('1.1.5', '1.1.5'));
   t.true(testIntersects('1.4.11', '>= 1.3, < 1.5'));

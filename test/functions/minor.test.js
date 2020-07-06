@@ -4,7 +4,7 @@ import { minor } from '../../';
 
 // minor(v): Return the minor version number.
 
-test('minor(v)', t => {
+test('minor(v)', (t) => {
   t.is(minor('1'), null);
   t.is(minor('1.2'), 2);
   t.is(minor('1.2.3'), 2);

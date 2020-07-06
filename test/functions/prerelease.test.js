@@ -5,7 +5,7 @@ import { prerelease } from '../../';
 // prerelease(v): Returns an array of prerelease components, or null if none
 // exist. Example: prerelease('1.2.3-alpha.1') -> ['alpha', 1]
 
-test('prerelease(v)', t => {
+test('prerelease(v)', (t) => {
   t.deepEqual(prerelease('1.2.3.alpha.1'), ['alpha', 1]);
   t.deepEqual(prerelease('1.2.3.alpha.1.2'), ['alpha', 1, 2]);
   t.deepEqual(prerelease('1.2.3-1'), ['pre', 1]);

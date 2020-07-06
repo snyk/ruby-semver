@@ -1,41 +1,28 @@
-'use strict';
+import { GemVersion, MaybeGemVersion, Ordering } from './ruby/gem-version';
 
-const GemVersion = require('./ruby/gem-version');
+export { gt, gte, lt, lte, eq, neq, cmp, compare, rcompare, diff };
 
-module.exports = {
-  gt,
-  gte,
-  lt,
-  lte,
-  eq,
-  neq,
-  cmp,
-  compare,
-  rcompare,
-  diff,
-};
-
-function gt(v1, v2) {
+function gt(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) > 0;
 }
 
-function gte(v1, v2) {
+function gte(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) >= 0;
 }
 
-function lt(v1, v2) {
+function lt(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) < 0;
 }
 
-function lte(v1, v2) {
+function lte(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) <= 0;
 }
 
-function eq(v1, v2) {
+function eq(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return compare(v1, v2) === 0;
 }
 
-function neq(v1, v2) {
+function neq(v1: MaybeGemVersion, v2: MaybeGemVersion): boolean {
   return !eq(v1, v2);
 }
 
@@ -47,7 +34,11 @@ function _strictNeq(v1, v2) {
   return !_strictEq(v1, v2);
 }
 
-function cmp(v1, comparator, v2) {
+function cmp(
+  v1: MaybeGemVersion,
+  comparator: string,
+  v2: MaybeGemVersion,
+): boolean {
   switch (comparator) {
     case '>':
       return gt(v1, v2);
@@ -70,30 +61,40 @@ function cmp(v1, comparator, v2) {
   }
 }
 
-function compare(v1, v2) {
+function compare(
+  v1: MaybeGemVersion,
+  v2: MaybeGemVersion,
+): Ordering | undefined {
   return GemVersion.create(v1).compare(GemVersion.create(v2));
 }
 
-function rcompare(v1, v2) {
+function rcompare(
+  v1: MaybeGemVersion,
+  v2: MaybeGemVersion,
+): Ordering | undefined {
   return GemVersion.create(v2).compare(GemVersion.create(v1));
 }
 
-function diff(v1, v2) {
-  if (eq(v1, v2)) { return null; }
+function diff(v1: MaybeGemVersion, v2: MaybeGemVersion): string | null {
+  if (eq(v1, v2)) {
+    return null;
+  }
 
   const version1 = GemVersion.create(v1);
   const version2 = GemVersion.create(v2);
   let hasPrerelease;
 
   const segments = [version1.getSegments(), version2.getSegments()]
-  .map(seg => {
-    const prereleaseIndex = seg.findIndex(v => String(v).match(/[a-zA-Z]/));
-    if (prereleaseIndex === -1) { return seg; }
+    .map((seg) => {
+      const prereleaseIndex = seg.findIndex((v) => String(v).match(/[a-zA-Z]/));
+      if (prereleaseIndex === -1) {
+        return seg;
+      }
 
-    hasPrerelease = true;
-    return seg.slice(0, prereleaseIndex);
-  })
-  .sort((a,b) => b.length - a.length)
+      hasPrerelease = true;
+      return seg.slice(0, prereleaseIndex);
+    })
+    .sort((a, b) => b.length - a.length);
 
   const diffPosition = segments[0].findIndex((v, i) => v !== segments[1][i]);
 

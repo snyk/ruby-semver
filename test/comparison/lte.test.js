@@ -2,7 +2,7 @@ import test from 'ava';
 
 import { lte } from '../../';
 
-test('lte(v1, v2): v1 <= v2', t => {
+test('lte(v1, v2): v1 <= v2', (t) => {
   t.truthy(lte('1', '2'));
   t.truthy(lte('5.3', '5.4'));
   t.truthy(lte('5.0.0', '5.0.1'));

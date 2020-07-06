@@ -148,22 +148,33 @@
 // For the last example, single-digit versions are automatically extended with
 // a zero to give a sensible result.
 
-const VERSION_PATTERN = '[0-9]+(\.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?';
+const VERSION_PATTERN =
+  '[0-9]+(.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(.[0-9A-Za-z-]+)*)?';
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
-class GemVersion {
+export type MaybeGemVersion = GemVersion | string;
+export type Ordering = 1 | 0 | -1;
+
+export class GemVersion {
+  version: string;
+  _release?: GemVersion;
+  _isPrerelease?: boolean;
+  _bump?: GemVersion;
+
+  static VERSION_PATTERN;
+
   // include Comparable
-
-
 
   // -----------------------------
   // A string representation of this Version.
-  toString() { return this.version; }
+  toString(): string {
+    return this.version;
+  }
 
   // -----------------------------
   // True if the +version+ string matches RubyGems' requirements.
 
-  static isCorrect(version) {
+  static isCorrect(version: string): boolean {
     return ANCHORED_VERSION_PATTERN.test(version);
   }
 
@@ -175,9 +186,13 @@ class GemVersion {
   //   ver2 = Version.create(ver1)       // -> (ver1)
   //   ver3 = Version.create(nil)        // -> nil
 
-  static create(input) {
-    if (input instanceof GemVersion) { return input; }
-    if (!input) { return; }
+  static create(input: MaybeGemVersion): GemVersion | undefined {
+    if (input instanceof GemVersion) {
+      return input;
+    }
+    if (!input) {
+      return undefined;
+    }
 
     return new GemVersion(input);
   }
@@ -194,7 +209,7 @@ class GemVersion {
   // Constructs a Version from the +version+ string.  A version string is a
   // series of digits or ASCII letters separated by dots.
 
-  constructor(version) {
+  constructor(version: string) {
     if (!GemVersion.isCorrect(version)) {
       throw new Error(`Malformed version number string ${version}`);
     }
@@ -218,10 +233,10 @@ class GemVersion {
   //             end
   // end
 
-  bump() {
+  bump(): GemVersion {
     if (!this._bump) {
       const segments = this.getSegments();
-      while (segments.some(x => typeof x === 'string')) {
+      while (segments.some((x) => typeof x === 'string')) {
         segments.pop();
       }
       if (segments.length > 1) {
@@ -229,18 +244,17 @@ class GemVersion {
       }
       const last = segments.pop();
       segments.push(Number(last) + 1);
-      this._bump = new GemVersion(segments.join("."));
+      this._bump = new GemVersion(segments.join('.'));
     }
 
     return this._bump;
   }
 
-
   // -----------------------------
   // A Version is only eql? to another version if it's specified to the
   // same precision. Version "1.0" is not the same as version "1".
 
-  isIdentical(other) {
+  isIdentical(other: unknown): boolean {
     return other instanceof GemVersion && other.version === this.version;
   }
 
@@ -289,7 +303,7 @@ class GemVersion {
   // -----------------------------
   // A version is considered a prerelease if it contains a letter.
 
-  isPrerelease() {
+  isPrerelease(): boolean {
     if (this._isPrerelease === undefined) {
       this._isPrerelease = /[a-zA-Z]/.test(this.version);
     }
@@ -305,11 +319,11 @@ class GemVersion {
   // The release for this version (e.g. 1.2.0.a -> 1.2.0).
   // Non-prerelease versions return themselves.
 
-  release() {
+  release(): GemVersion {
     if (!this._release) {
       if (this.isPrerelease) {
         const segments = this.getSegments();
-        while (segments.some(x => typeof x === 'string')) {
+        while (segments.some((x) => typeof x === 'string')) {
           segments.pop();
         }
         this._release = new GemVersion(segments.join('.'));
@@ -331,10 +345,10 @@ class GemVersion {
   //   end
   // end
 
-  getSegments() {
+  getSegments(): Array<string | number> {
     return this.version
-      .match(/[0-9]+|[a-z]+/ig)
-      .map(s => /^\d+$/.test(s) ? Number(s) : s);
+      .match(/[0-9]+|[a-z]+/gi)
+      .map((s) => (/^\d+$/.test(s) ? Number(s) : s));
   }
 
   // -----------------------------
@@ -356,16 +370,22 @@ class GemVersion {
   // one. Attempts to compare to something that's not a
   // <tt>GemVersion</tt> return +nil+.
 
-  compare(other) {
-    if (!other instanceof GemVersion) { return; }
-    if (other.version === this.version) { return 0; }
+  compare(other: GemVersion): Ordering;
+  compare(other: unknown): undefined;
+  compare(other: GemVersion | unknown): Ordering | undefined {
+    if (!(other instanceof GemVersion)) {
+      return undefined;
+    }
+    if (other.version === this.version) {
+      return 0;
+    }
 
     const lhsegments = this.getSegments();
     const rhsegments = other.getSegments();
 
     const lhsize = lhsegments.length;
     const rhsize = rhsegments.length;
-    const limit  = (lhsize > rhsize ? lhsize : rhsize) - 1;
+    const limit = (lhsize > rhsize ? lhsize : rhsize) - 1;
 
     let i = 0;
 
@@ -378,11 +398,19 @@ class GemVersion {
         continue;
       }
 
-      if (isString(lhs) && isNumber(rhs)) { return -1; }
-      if (isNumber(lhs) && isString(rhs)) { return 1; }
+      if (isString(lhs) && isNumber(rhs)) {
+        return -1;
+      }
+      if (isNumber(lhs) && isString(rhs)) {
+        return 1;
+      }
 
-      if (lhs < rhs) { return -1; }
-      if (lhs > rhs) { return 1; }
+      if (lhs < rhs) {
+        return -1;
+      }
+      if (lhs > rhs) {
+        return 1;
+      }
     }
 
     return 0;
@@ -404,5 +432,3 @@ function isNumber(val) {
 }
 
 GemVersion.VERSION_PATTERN = VERSION_PATTERN;
-
-module.exports = GemVersion;

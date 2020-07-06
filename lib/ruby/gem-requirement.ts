@@ -1,8 +1,8 @@
-const _escapeRegExp = require('lodash.escaperegexp');
-const _flatten = require('lodash.flatten');
-const _uniq = require('lodash.uniq');
+import * as _escapeRegExp from 'lodash.escaperegexp';
+import * as _flatten from 'lodash.flatten';
+import * as _uniq from 'lodash.uniq';
 
-const GemVersion = require('./gem-version');
+import { GemVersion } from './gem-version';
 
 const OPS = {
   '=': (v, r) => v.compare(r) === 0,
@@ -14,7 +14,9 @@ const OPS = {
   '~>': (v, r) => v.compare(r) >= 0 && v.release().compare(r.bump()) < 0,
 };
 
-const quoted  = Object.keys(OPS).map(k => _escapeRegExp(k)).join('|');
+const quoted = Object.keys(OPS)
+  .map((k) => _escapeRegExp(k))
+  .join('|');
 const PATTERN_RAW = `\\s*(${quoted})?\\s*(${GemVersion.VERSION_PATTERN})\\s*`;
 // --
 // A regular expression that matches a requirement
@@ -22,16 +24,20 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 
 // --
 // The default requirement matches any version
-const DefaultRequirement = [">=", new GemVersion(0)];
+const DefaultRequirement: [string, GemVersion] = ['>=', new GemVersion('0')];
 
-module.exports = class GemRequirement {
+type RequirementParts = GemVersion | string | Array<RequirementParts>;
+
+export class GemRequirement {
+  requirements: Array<unknown>;
+
   // --
   // Factory method to create a GemRequirement object.  Input may be
   // a Version, a String, or nil.  Intended to simplify client code.
   //
   // If the input is "weird", the default version requirement is
   // returned.
-  static create(input) {
+  static create(input: GemRequirement | RequirementParts): GemRequirement {
     if (input instanceof GemRequirement) {
       return input;
     }
@@ -40,10 +46,9 @@ module.exports = class GemRequirement {
 
   // --
   // A default "version requirement" can surely _only_ be '>= 0'.
-  static default() {
+  static default(): GemRequirement {
     return new GemRequirement('>= 0');
   }
-
 
   // --
   // Parse +obj+, returning an <tt>[op, version]</tt> pair. +obj+ can
@@ -57,9 +62,9 @@ module.exports = class GemRequirement {
   //     parse("1.0")                   // => ["=", GemVersion.new("1.0")]
   //     parse(GemVersion.new("1.0")) # => ["=,  GemVersion.new("1.0")]
 
-  static parse(obj) {
+  static parse(obj: string | GemVersion): [string, GemVersion] {
     if (obj instanceof GemVersion) {
-      return ["=", obj];
+      return ['=', obj];
     }
 
     const match = String(obj).match(PATTERN);
@@ -67,10 +72,10 @@ module.exports = class GemRequirement {
       throw new Error(`Illformed requirement [${obj}]`);
     }
 
-    if (match[1] == ">=" && match[2] == "0") {
+    if (match[1] == '>=' && match[2] == '0') {
       return DefaultRequirement;
     } else {
-      return [match[1] || "=", new GemVersion(match[2])];
+      return [match[1] || '=', new GemVersion(match[2])];
     }
   }
 
@@ -80,13 +85,13 @@ module.exports = class GemRequirement {
   // requirements are ignored. An empty set of +requirements+ is the
   // same as <tt>">= 0"</tt>.
 
-  constructor(...requirements) {
-    requirements = _uniq(_flatten(requirements)).filter(Boolean);
+  constructor(...requirements: RequirementParts[]) {
+    const flat = _uniq(_flatten(requirements)).filter(Boolean);
 
-    if (requirements.length === 0) {
+    if (flat.length === 0) {
       this.requirements = [DefaultRequirement];
     } else {
-      this.requirements = requirements.map(GemRequirement.parse);
+      this.requirements = flat.map((req) => GemRequirement.parse(req));
     }
   }
 
@@ -136,10 +141,8 @@ module.exports = class GemRequirement {
   //   @requirements[0][0] == "="
   // end
 
-  asList() {
-    return this.requirements
-      .map(([op, version]) => `${op} ${version}`)
-      .sort();
+  asList(): string[] {
+    return this.requirements.map(([op, version]) => `${op} ${version}`).sort();
   }
 
   // def hash # :nodoc:
@@ -183,8 +186,8 @@ module.exports = class GemRequirement {
   // A requirement is a prerelease if any of the versions inside of it
   // are prereleases
 
-  isPrerelease() {
-    return this.requirements.some(r => r[1].isPrerelease());
+  isPrerelease(): boolean {
+    return this.requirements.some((r) => r[1].isPrerelease());
   }
 
   // def pretty_print q # :nodoc:
@@ -203,16 +206,15 @@ module.exports = class GemRequirement {
   // requirements.all? { |op, rv| (OPS[op] || OPS["="]).call version, rv }
   // end
 
-  satisfiedBy(version) {
-    if (!version instanceof GemVersion) {
+  satisfiedBy(version: GemVersion): boolean {
+    if (!(version instanceof GemVersion)) {
       throw new Error(`Need a GemVersion: ${version}`);
     }
 
-    return this.requirements
-      .every(([op, rv]) => {
-        const fn = (OPS[op] || OPS['=']);
-        return fn(version, rv);
-      });
+    return this.requirements.every(([op, rv]) => {
+      const fn = OPS[op] || OPS['='];
+      return fn(version, rv);
+    });
   }
 
   // alias :=== :satisfied_by?
@@ -227,7 +229,7 @@ module.exports = class GemRequirement {
   //   not %w[> >=].include? @requirements.first.first # grab the operator
   // end
 
-  toString() {
+  toString(): string {
     return this.asList().join(', ');
   }
 

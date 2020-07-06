@@ -4,7 +4,7 @@ import { valid } from '../../';
 
 // valid(v): Return the parsed version, or null if it's not valid.
 
-test('valid(v)', t => {
+test('valid(v)', (t) => {
   t.is(valid('1'), '1');
   t.is(valid('1.1'), '1.1');
   t.is(valid('1.1.2'), '1.1.2');
