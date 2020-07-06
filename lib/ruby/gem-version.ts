@@ -157,9 +157,9 @@ export type Ordering = 1 | 0 | -1;
 
 export class GemVersion {
   version: string;
-  _release;
-  _isPrerelease;
-  _bump;
+  _release?: GemVersion;
+  _isPrerelease?: boolean;
+  _bump?: GemVersion;
 
   static VERSION_PATTERN;
 
@@ -167,14 +167,14 @@ export class GemVersion {
 
   // -----------------------------
   // A string representation of this Version.
-  toString() {
+  toString(): string {
     return this.version;
   }
 
   // -----------------------------
   // True if the +version+ string matches RubyGems' requirements.
 
-  static isCorrect(version) {
+  static isCorrect(version: string): boolean {
     return ANCHORED_VERSION_PATTERN.test(version);
   }
 
@@ -209,7 +209,7 @@ export class GemVersion {
   // Constructs a Version from the +version+ string.  A version string is a
   // series of digits or ASCII letters separated by dots.
 
-  constructor(version) {
+  constructor(version: string) {
     if (!GemVersion.isCorrect(version)) {
       throw new Error(`Malformed version number string ${version}`);
     }
@@ -233,7 +233,7 @@ export class GemVersion {
   //             end
   // end
 
-  bump() {
+  bump(): GemVersion {
     if (!this._bump) {
       const segments = this.getSegments();
       while (segments.some((x) => typeof x === 'string')) {
@@ -254,7 +254,7 @@ export class GemVersion {
   // A Version is only eql? to another version if it's specified to the
   // same precision. Version "1.0" is not the same as version "1".
 
-  isIdentical(other) {
+  isIdentical(other: unknown): boolean {
     return other instanceof GemVersion && other.version === this.version;
   }
 
@@ -303,7 +303,7 @@ export class GemVersion {
   // -----------------------------
   // A version is considered a prerelease if it contains a letter.
 
-  isPrerelease() {
+  isPrerelease(): boolean {
     if (this._isPrerelease === undefined) {
       this._isPrerelease = /[a-zA-Z]/.test(this.version);
     }
@@ -319,7 +319,7 @@ export class GemVersion {
   // The release for this version (e.g. 1.2.0.a -> 1.2.0).
   // Non-prerelease versions return themselves.
 
-  release() {
+  release(): GemVersion {
     if (!this._release) {
       if (this.isPrerelease) {
         const segments = this.getSegments();
@@ -345,7 +345,7 @@ export class GemVersion {
   //   end
   // end
 
-  getSegments() {
+  getSegments(): Array<string | number> {
     return this.version
       .match(/[0-9]+|[a-z]+/gi)
       .map((s) => (/^\d+$/.test(s) ? Number(s) : s));
@@ -370,7 +370,9 @@ export class GemVersion {
   // one. Attempts to compare to something that's not a
   // <tt>GemVersion</tt> return +nil+.
 
-  compare(other): Ordering | undefined {
+  compare(other: GemVersion): Ordering;
+  compare(other: unknown): undefined;
+  compare(other: GemVersion | unknown): Ordering | undefined {
     if (!(other instanceof GemVersion)) {
       return undefined;
     }

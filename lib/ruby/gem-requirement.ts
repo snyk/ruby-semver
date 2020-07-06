@@ -24,9 +24,9 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 
 // --
 // The default requirement matches any version
-const DefaultRequirement = ['>=', new GemVersion(0)];
+const DefaultRequirement: [string, GemVersion] = ['>=', new GemVersion('0')];
 
-type MaybeGemRequirement = GemRequirement | string | Array<MaybeGemRequirement>;
+type RequirementParts = GemVersion | string | Array<RequirementParts>;
 
 export class GemRequirement {
   requirements: Array<unknown>;
@@ -37,7 +37,7 @@ export class GemRequirement {
   //
   // If the input is "weird", the default version requirement is
   // returned.
-  static create(input: MaybeGemRequirement) {
+  static create(input: GemRequirement | RequirementParts): GemRequirement {
     if (input instanceof GemRequirement) {
       return input;
     }
@@ -46,7 +46,7 @@ export class GemRequirement {
 
   // --
   // A default "version requirement" can surely _only_ be '>= 0'.
-  static default() {
+  static default(): GemRequirement {
     return new GemRequirement('>= 0');
   }
 
@@ -62,7 +62,7 @@ export class GemRequirement {
   //     parse("1.0")                   // => ["=", GemVersion.new("1.0")]
   //     parse(GemVersion.new("1.0")) # => ["=,  GemVersion.new("1.0")]
 
-  static parse(obj) {
+  static parse(obj: string | GemVersion): [string, GemVersion] {
     if (obj instanceof GemVersion) {
       return ['=', obj];
     }
@@ -85,13 +85,13 @@ export class GemRequirement {
   // requirements are ignored. An empty set of +requirements+ is the
   // same as <tt>">= 0"</tt>.
 
-  constructor(...requirements: MaybeGemRequirement[]) {
-    requirements = _uniq(_flatten(requirements)).filter(Boolean);
+  constructor(...requirements: RequirementParts[]) {
+    const flat = _uniq(_flatten(requirements)).filter(Boolean);
 
-    if (requirements.length === 0) {
+    if (flat.length === 0) {
       this.requirements = [DefaultRequirement];
     } else {
-      this.requirements = requirements.map((req) => GemRequirement.parse(req));
+      this.requirements = flat.map((req) => GemRequirement.parse(req));
     }
   }
 
@@ -141,7 +141,7 @@ export class GemRequirement {
   //   @requirements[0][0] == "="
   // end
 
-  asList() {
+  asList(): string[] {
     return this.requirements.map(([op, version]) => `${op} ${version}`).sort();
   }
 
@@ -186,7 +186,7 @@ export class GemRequirement {
   // A requirement is a prerelease if any of the versions inside of it
   // are prereleases
 
-  isPrerelease() {
+  isPrerelease(): boolean {
     return this.requirements.some((r) => r[1].isPrerelease());
   }
 
@@ -229,7 +229,7 @@ export class GemRequirement {
   //   not %w[> >=].include? @requirements.first.first # grab the operator
   // end
 
-  toString() {
+  toString(): string {
     return this.asList().join(', ');
   }
 
