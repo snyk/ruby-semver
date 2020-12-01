@@ -5,6 +5,8 @@ import { valid } from '../../';
 describe('test valid', () => {
   it('valid(v)', () => {
     expect(valid('1')).toBe('1');
+    expect(valid('1 ')).toBe('1');
+    expect(valid(' 1')).toBe('1');
     expect(valid('1.1')).toBe('1.1');
     expect(valid('1.1.2')).toBe('1.1.2');
     expect(valid('1.1.2.3')).toBe('1.1.2.3');
@@ -12,6 +14,8 @@ describe('test valid', () => {
     expect(valid('1.1.2.pre.4')).toBe('1.1.2.pre.4');
 
     expect(valid('nonsense')).toBe(null);
+    expect(valid('1.2<3')).toBe(null);
+    expect(valid('1.2 3')).toBe(null);
     expect(valid('')).toBe(null);
     expect(valid(null)).toBe(null);
     // expect(valid()).toBe(null); not valid with typescript
