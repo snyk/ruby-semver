@@ -33,6 +33,7 @@ describe('test cmp', () => {
   it('cmp(v1, "==", v2)',  () => {
     expect(cmp('2', '==', '2')).toBeTruthy();
     expect(cmp('2', '==', '2.0')).toBeTruthy();
+    expect(cmp('1.13.10', '==','1.13.10-x86_64-darwin')).toBeTruthy();
     expect(cmp('2', '==', '1')).toBeFalsy();
   });
 

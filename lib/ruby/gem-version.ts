@@ -157,6 +157,7 @@ export type Ordering = 1 | 0 | -1;
 
 export class GemVersion {
   version: string;
+  _version: string;
   _release?: GemVersion;
   _isPrerelease?: boolean;
   _bump?: GemVersion;
@@ -175,6 +176,10 @@ export class GemVersion {
   // True if the +version+ string matches RubyGems' requirements.
 
   static isCorrect(version: string): boolean {
+    const shouldLogVerison = version.toString().startsWith('1.13.10-x86');
+    shouldLogVerison && console.log('isCorrect', version);
+
+    
     return ANCHORED_VERSION_PATTERN.test(version);
   }
 
@@ -211,10 +216,37 @@ export class GemVersion {
 
   constructor(version: string) {
     if (!GemVersion.isCorrect(version)) {
-      throw new Error(`Malformed version number string ${version}`);
-    }
+      console.log('<<<<<<<<<<<< The version string at line 213 is the value of ', version);
+      const [v,q] = this.splitStringQualifier(version);
+      console.log('<<<<<<<<<<<< The version string at line 216 is the value of ', v,q );
 
-    this.version = String(version).trim().replace('-', '.pre.');
+      if (!GemVersion.isCorrect(v)){
+        throw new Error(`Malformed version number string ${version}`);
+      };
+
+      this._version = String(v).trim();
+      // TODO: When version is seen as invalid, try testing the qualifier and version separately. 
+      // if the version is valid and the qualifier is not valid, then separate the qualifer from the version temporarily and save it to this.qualifier and instead of taking
+      // original version, you solve the already split valid version
+    }
+      else {
+        this._version = String(version).trim().replace('-', '.pre.');
+      };
+      
+      this.version = String(version).trim().replace('-', '.pre.');
+
+  }
+
+  splitStringQualifier(inputString: string): [string, string] {
+    const hyphenIndex = inputString.indexOf('-');
+    console.log('this is the hyphen index == ', hyphenIndex);
+    if (hyphenIndex == -1) return [inputString, ''];
+
+    const qualifier = inputString.substring(hyphenIndex);
+    const validVersion = inputString.substring(0, hyphenIndex);
+
+    return [validVersion, qualifier];
+    
   }
 
   // -----------------------------
@@ -346,7 +378,7 @@ export class GemVersion {
   // end
 
   getSegments(): Array<string | number> {
-    return this.version
+    return this._version
       .match(/[0-9]+|[a-z]+/gi)
       .map((s) => (/^\d+$/.test(s) ? Number(s) : s));
   }
@@ -373,6 +405,11 @@ export class GemVersion {
   compare(other: GemVersion): Ordering;
   compare(other: unknown): undefined;
   compare(other: GemVersion | unknown): Ordering | undefined {
+
+    const shouldLog = other.toString().startsWith('1.13.10');
+    
+    shouldLog && console.log('=================start of compare function');
+
     if (!(other instanceof GemVersion)) {
       return undefined;
     }
@@ -402,6 +439,7 @@ export class GemVersion {
         return -1;
       }
       if (isNumber(lhs) && isString(rhs)) {
+        shouldLog && console.log('This is line 405 ', lhs, rhs);
         return 1;
       }
 
@@ -409,6 +447,7 @@ export class GemVersion {
         return -1;
       }
       if (lhs > rhs) {
+        shouldLog && console.log('This is line 413 ',lhs, rhs);
         return 1;
       }
     }
