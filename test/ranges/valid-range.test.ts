@@ -13,5 +13,14 @@ describe('test validRange', () => {
     expect(validRange('')).toBe('>= 0');
     // expect(validRange()).toBe(null); not valie with typescript
     expect(validRange('nonsense')).toBe(null);
-  })
+  });
+
+  it('validRange(range) multi-platform', () => {
+    expect(validRange('~> 1.1.1.beta.1-x86_64-darwin')).toBe(
+      '< 1.2-x86_64-darwin, >= 1.1.1.beta.1-x86_64-darwin',
+    );
+    expect(validRange('> 2.1-x86_64-darwin, < 2.4-x86_64-darwin')).toBe(
+      '< 2.4-x86_64-darwin, > 2.1-x86_64-darwin',
+    );
+  });
 });
