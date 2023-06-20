@@ -155,8 +155,22 @@ const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 export type MaybeGemVersion = GemVersion | string;
 export type Ordering = 1 | 0 | -1;
 
+export const VALID_PLATFORM_QUALIFIERS = [
+  'x86_64-darwin',
+  'arm-linux',
+  'java',
+  'arm64-darwin',
+  'x86-mingw32',
+  'aarch64-linux',
+  'x64-mingw-ucrt',
+  'x86-linux',
+  'x64-mingw32',
+  'x86_64-linux',
+];
+
 export class GemVersion {
   version: string;
+  platform?: string;
   _release?: GemVersion;
   _isPrerelease?: boolean;
   _bump?: GemVersion;
@@ -168,7 +182,8 @@ export class GemVersion {
   // -----------------------------
   // A string representation of this Version.
   toString(): string {
-    return this.version;
+    return this.platform ? `${this.version}-${this.platform}` : this.version;
+    // return this.version;
   }
 
   // -----------------------------
@@ -210,6 +225,19 @@ export class GemVersion {
   // series of digits or ASCII letters separated by dots.
 
   constructor(version: string) {
+    // const original = version;
+    // 1.13.10-x86_64-darwin
+    const platform: string | undefined = VALID_PLATFORM_QUALIFIERS.find(
+      (platform) => {
+        return version.endsWith(`-${platform}`);
+      },
+    );
+
+    if (platform) {
+      this.platform = platform;
+      version = version.slice(0, -platform.length - 1);
+    }
+
     if (!GemVersion.isCorrect(version)) {
       throw new Error(`Malformed version number string ${version}`);
     }
@@ -374,6 +402,9 @@ export class GemVersion {
   compare(other: unknown): undefined;
   compare(other: GemVersion | unknown): Ordering | undefined {
     if (!(other instanceof GemVersion)) {
+      return undefined;
+    }
+    if (other.platform !== this.platform) {
       return undefined;
     }
     if (other.version === this.version) {

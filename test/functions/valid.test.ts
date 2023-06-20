@@ -17,7 +17,12 @@ describe('test valid', () => {
     expect(valid('1.2<3')).toBe(null);
     expect(valid('1.2 3')).toBe(null);
     expect(valid('')).toBe(null);
-    expect(valid(null)).toBe(null);
+    expect(valid(null as any)).toBe(null);
     // expect(valid()).toBe(null); not valid with typescript
-  })
+
+    // TODO(platform): DECIDE!!!
+    // expect(valid('1.13.10-x86_64-darwin')).toBe('1.13.10');
+    // OR
+    expect(valid('1.13.10-x86_64-darwin')).toBe('1.13.10-x86_64-darwin');
+  });
 });

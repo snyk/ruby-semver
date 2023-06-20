@@ -2,7 +2,7 @@ import * as _escapeRegExp from 'lodash.escaperegexp';
 import * as _flatten from 'lodash.flatten';
 import * as _uniq from 'lodash.uniq';
 
-import { GemVersion } from './gem-version';
+import { GemVersion, VALID_PLATFORM_QUALIFIERS } from './gem-version';
 
 const OPS = {
   '=': (v, r) => v.compare(r) === 0,
@@ -14,6 +14,8 @@ const OPS = {
   '~>': (v, r) => v.compare(r) >= 0 && v.release().compare(r.bump()) < 0,
 };
 
+type OP = keyof typeof OPS;
+
 const quoted = Object.keys(OPS)
   .map((k) => _escapeRegExp(k))
   .join('|');
@@ -24,12 +26,12 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 
 // --
 // The default requirement matches any version
-const DefaultRequirement: [string, GemVersion] = ['>=', new GemVersion('0')];
+const DefaultRequirement: [OP, GemVersion] = ['>=', new GemVersion('0')];
 
 type RequirementParts = GemVersion | string | Array<RequirementParts>;
 
 export class GemRequirement {
-  requirements: Array<unknown>;
+  requirements: Array<[OP, GemVersion]>;
 
   // --
   // Factory method to create a GemRequirement object.  Input may be
@@ -67,7 +69,19 @@ export class GemRequirement {
       return ['=', obj];
     }
 
-    const match = String(obj).match(PATTERN);
+    let str = String(obj);
+    const platform: string | undefined = VALID_PLATFORM_QUALIFIERS.find(
+      (platform) => {
+        return str.endsWith(`-${platform}`);
+      },
+    );
+    const platformPostfix = platform ? `-${platform}` : '';
+    if (platform) {
+      str = str.slice(0, -platform.length - 1);
+    }
+
+    const match = str.match(PATTERN);
+    // const match = String(obj).match(PATTERN);
     if (!match) {
       throw new Error(`Illformed requirement [${obj}]`);
     }
@@ -75,7 +89,8 @@ export class GemRequirement {
     if (match[1] == '>=' && match[2] == '0') {
       return DefaultRequirement;
     } else {
-      return [match[1] || '=', new GemVersion(match[2])];
+      // console.log('match[2]', match[2]);
+      return [match[1] || '=', new GemVersion(match[2] + platformPostfix)];
     }
   }
 
