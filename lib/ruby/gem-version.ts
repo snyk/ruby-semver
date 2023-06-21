@@ -272,7 +272,8 @@ export class GemVersion {
       }
       const last = segments.pop();
       segments.push(Number(last) + 1);
-      this._bump = new GemVersion(segments.join('.'));
+      const platformPostfix = this.platform ? `-${this.platform}` : '';
+      this._bump = new GemVersion(segments.join('.') + platformPostfix);
     }
 
     return this._bump;
