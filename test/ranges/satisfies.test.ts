@@ -16,7 +16,7 @@ describe('test satisfies', () => {
     expect(satisfies('1.2.1', 'nonsense')).toBeFalsy();
   });
 
-  it('multi-platform satisfies(version, range)', () => {
+  it('satisfies(version, range) multi-platform', () => {
     expect(satisfies('1.1', '< 1.13.10-x86_64-darwin')).toBeFalsy();
     expect(satisfies('1.14.0', '> 1.13.10-x86_64-darwin')).toBeFalsy();
     expect(satisfies('1.13.10', '= 1.13.10-x86_64-darwin')).toBeFalsy();

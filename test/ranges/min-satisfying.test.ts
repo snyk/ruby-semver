@@ -6,8 +6,12 @@ describe('test minSatisfying', () => {
   it('minSatisfying(versions, range)', () => {
     expect(minSatisfying(['1.2.3', '1.2.4'], '~> 1.2')).toBe('1.2.3');
     expect(minSatisfying(['1.2.4', '1.2.3'], '~> 1.2')).toBe('1.2.3');
-    expect(minSatisfying(['1.2.3', '1.2.4', '1.2.5'], '~> 1.2, >= 1.2.4')).toBe('1.2.4');
-    expect(minSatisfying(['1.2.3', '1.2.4', '1.2.5', '1.2.6'], '~>1.2.3')).toBe('1.2.3');
+    expect(minSatisfying(['1.2.3', '1.2.4', '1.2.5'], '~> 1.2, >= 1.2.4')).toBe(
+      '1.2.4',
+    );
+    expect(minSatisfying(['1.2.3', '1.2.4', '1.2.5', '1.2.6'], '~>1.2.3')).toBe(
+      '1.2.3',
+    );
     expect(
       minSatisfying(
         [
@@ -22,7 +26,61 @@ describe('test minSatisfying', () => {
           '2.1.0',
         ],
         '~> 2.0.0',
-      )).toBe('2.0.0');
+      ),
+    ).toBe('2.0.0');
     expect(minSatisfying(['1.2.3', '1.2.4'], '> 3.2')).toBeNull();
-  })
+  });
+  it('minSatisfying(versions, range) multi-platform', () => {
+    expect(
+      minSatisfying(
+        ['1.2.3-x86_64-linux', '1.2.4-x86_64-linux'],
+        '~> 1.2-x86_64-linux',
+      ),
+    ).toBe('1.2.3-x86_64-linux');
+    expect(
+      minSatisfying(
+        ['1.2.4-x86_64-linux', '1.2.3-x86_64-linux'],
+        '~> 1.2-x86_64-linux',
+      ),
+    ).toBe('1.2.3-x86_64-linux');
+    expect(
+      minSatisfying(
+        ['1.2.3-x86_64-linux', '1.2.4-x86_64-linux', '1.2.5-x86_64-linux'],
+        '~> 1.2-x86_64-linux, >= 1.2.4-x86_64-linux',
+      ),
+    ).toBe('1.2.4-x86_64-linux');
+    expect(
+      minSatisfying(
+        [
+          '1.2.3-x86_64-linux',
+          '1.2.4-x86_64-linux',
+          '1.2.5-x86_64-linux',
+          '1.2.6-x86_64-linux',
+        ],
+        '~>1.2.3-x86_64-linux',
+      ),
+    ).toBe('1.2.3-x86_64-linux');
+    expect(
+      minSatisfying(
+        [
+          '1.1.0-x86_64-linux',
+          '1.2.0-x86_64-linux',
+          '1.2.1-x86_64-linux',
+          '1.3.0-x86_64-linux',
+          '2.0.0b1-x86_64-linux',
+          '2.0.0b2-x86_64-linux',
+          '2.0.0b3-x86_64-linux',
+          '2.0.0-x86_64-linux',
+          '2.1.0-x86_64-linux',
+        ],
+        '~> 2.0.0-x86_64-linux',
+      ),
+    ).toBe('2.0.0-x86_64-linux');
+    expect(
+      minSatisfying(
+        ['1.2.3-x86_64-linux', '1.2.4-x86_64-linux'],
+        '> 3.2-x86_64-linux',
+      ),
+    ).toBeNull();
+  });
 });

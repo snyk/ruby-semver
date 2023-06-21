@@ -19,6 +19,6 @@ describe('test prerelease', () => {
     expect(prerelease('nonsense')).toStrictEqual(null);
     expect(prerelease('')).toStrictEqual(null);
     // expect(prerelease()).toStrictEqual(null); not valid with typescript
-    expect(prerelease(null)).toStrictEqual(null);
-  })
+    expect(prerelease(null as any)).toStrictEqual(null);
+  });
 });
