@@ -14,5 +14,12 @@ describe('test satisfies', () => {
     expect(satisfies('1.5.2', '>= 1.3, < 1.5')).toBeFalsy();
 
     expect(satisfies('1.2.1', 'nonsense')).toBeFalsy();
-  })
+  });
+
+  it('satisfies(version, range) multi-platform', () => {
+    expect(satisfies('1.13.10-x86_64-darwin', '< 1.14.0')).toBeTruthy();
+    expect(satisfies('1.13.10-x86_64-darwin', '> 1.14.0')).toBeFalsy();
+    expect(satisfies('1.15.10-x86_64-darwin', '> 1.14.0')).toBeTruthy();
+    expect(satisfies('1.15.10-x86_64-darwin', '< 1.14.0')).toBeFalsy();
+  });
 });

@@ -20,5 +20,10 @@ describe('test eq', () => {
     expect(eq('5.0.1.52.200', '5.0.1.52.176')).toBeFalsy();
     expect(eq('5.0.1-beta.3', '5.0.1-beta.1')).toBeFalsy();
     expect(eq('5.0.1-beta', '5.0.1-alpha')).toBeFalsy();
-  })
+
+    // versions with recognised platform qualifiers
+    expect(eq('5.0.1-x86_64-linux', '5.0.1')).toBeTruthy();
+    expect(eq('5.0.1-java', '5.0.1-x86_64-linux')).toBeTruthy();
+    expect(eq('5.0.1-x86_64-linux', '5.0.1.beta')).toBeFalsy();
+  });
 });

@@ -16,9 +16,13 @@ describe('test prerelease', () => {
     expect(prerelease('1.2.3.4')).toStrictEqual(null);
     expect(prerelease('1.2.3.4.5')).toStrictEqual(null);
 
+    // recognised platform qualifiers
+    expect(prerelease('1.2.3-java')).toStrictEqual(null);
+    expect(prerelease('1.2.3-x86_64-darwin')).toStrictEqual(null);
+
     expect(prerelease('nonsense')).toStrictEqual(null);
     expect(prerelease('')).toStrictEqual(null);
     // expect(prerelease()).toStrictEqual(null); not valid with typescript
-    expect(prerelease(null)).toStrictEqual(null);
-  })
+    expect(prerelease(null as any)).toStrictEqual(null);
+  });
 });

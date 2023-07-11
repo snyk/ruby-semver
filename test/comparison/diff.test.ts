@@ -8,7 +8,6 @@ const diff = semver.diff;
 // if the versions are the same.
 
 describe('test diff', () => {
-
   it('diff(v1, v2): same versions', () => {
     expect(diff('1', '1')).toBe(null);
     expect(diff('1.1', '1.1')).toBe(null);
@@ -23,6 +22,8 @@ describe('test diff', () => {
     expect(diff('2.0.0', '2')).toBe(null);
     expect(diff('2', '2.0.0.0')).toBe(null);
     expect(diff('2.0.0.0', '2')).toBe(null);
+    expect(diff('5.0.1-x86_64-linux', '5.0.1')).toBe(null);
+    expect(diff('5.0.1-x86_64-linux', '5.0.1-java')).toBe(null);
   });
 
   it('diff(v1, v2): major versions', () => {
@@ -31,6 +32,7 @@ describe('test diff', () => {
     expect(diff('1.1.2', '3.0.0')).toBe('major');
     expect(diff('1.1.2', '2.0.0')).toBe('major');
     expect(diff('1.1.1.1', '2.0.0')).toBe('major');
+    expect(diff('1.0.0-x86_64-linux', '2.0.0-java')).toBe('major');
   });
 
   it('diff(v1, v2): minor versions', () => {
@@ -39,6 +41,7 @@ describe('test diff', () => {
     expect(diff('1.1.2', '1.2.0')).toBe('minor');
     expect(diff('1.1.2.1', '1.2.0')).toBe('minor');
     expect(diff('1.1.2.1', '1.2.0.1')).toBe('minor');
+    expect(diff('1.1.0-x86_64-linux', '1.0.0-java')).toBe('minor');
   });
 
   it('diff(v1, v2): patch versions', () => {
@@ -48,6 +51,7 @@ describe('test diff', () => {
     expect(diff('1.1.2.1', '1.1.3.2.1')).toBe('patch');
     expect(diff('1.1.2.1', '1.1.2.1.1.1.2')).toBe('patch');
     expect(diff('1.1.2.1.1.1.1', '1.1.2.1.1.1.2')).toBe('patch');
+    expect(diff('1.1.1-x86_64-linux', '1.1.0-java')).toBe('patch');
   });
 
   it('diff(v1, v2): premajor versions', () => {
@@ -69,5 +73,5 @@ describe('test diff', () => {
     expect(diff('1.1.2.alpha.1', '1.1.2.alpha.2')).toBe('prerelease');
     expect(diff('1.1.2.3.alpha.1', '1.1.2.3.alpha.2')).toBe('prerelease');
     expect(diff('1.alpha.1', '1')).toBe('prerelease');
-  })
+  });
 });

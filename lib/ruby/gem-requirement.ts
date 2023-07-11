@@ -14,6 +14,8 @@ const OPS = {
   '~>': (v, r) => v.compare(r) >= 0 && v.release().compare(r.bump()) < 0,
 };
 
+type OP = keyof typeof OPS;
+
 const quoted = Object.keys(OPS)
   .map((k) => _escapeRegExp(k))
   .join('|');
@@ -24,12 +26,12 @@ const PATTERN = new RegExp(`^${PATTERN_RAW}$`);
 
 // --
 // The default requirement matches any version
-const DefaultRequirement: [string, GemVersion] = ['>=', new GemVersion('0')];
+const DefaultRequirement: [OP, GemVersion] = ['>=', new GemVersion('0')];
 
 type RequirementParts = GemVersion | string | Array<RequirementParts>;
 
 export class GemRequirement {
-  requirements: Array<unknown>;
+  requirements: Array<[OP, GemVersion]>;
 
   // --
   // Factory method to create a GemRequirement object.  Input may be

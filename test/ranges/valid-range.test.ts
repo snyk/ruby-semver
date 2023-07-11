@@ -11,7 +11,7 @@ describe('test validRange', () => {
     expect(validRange('> 2.1, < 2.4')).toBe('< 2.4, > 2.1');
 
     expect(validRange('')).toBe('>= 0');
-    // expect(validRange()).toBe(null); not valie with typescript
+    expect((validRange as Function)()).toBe(null);
     expect(validRange('nonsense')).toBe(null);
-  })
+  });
 });

@@ -77,11 +77,11 @@ function _firstSatisfying(
   compareFunction,
 ): string {
   const requirement = _createRequirement(range);
-  const maxSatisfying = versions
+  const firstSatisfyingVersion = versions
     .map((v) => GemVersion.create(v))
     .sort(compareFunction)
     .find((v) => requirement.satisfiedBy(v));
-  return maxSatisfying ? maxSatisfying.toString() : null;
+  return firstSatisfyingVersion ? firstSatisfyingVersion.toString() : null;
 }
 
 function maxSatisfying(versions: MaybeGemVersion[], range: string): string {

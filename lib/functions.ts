@@ -1,6 +1,6 @@
-import { GemVersion, MaybeGemVersion } from './ruby/gem-version';
+import { GemVersion, MaybeGemVersion, Platform } from './ruby/gem-version';
 
-export { valid, prerelease, major, minor, patch, inc };
+export { valid, prerelease, platform, major, minor, patch, inc };
 
 type Segment = string | number;
 
@@ -29,6 +29,19 @@ function prerelease(v: MaybeGemVersion): Segment[] | null {
         (s) => typeof s === 'string' && /[a-zA-Z]/.test(s),
       );
       return segments.slice(preStartIndex);
+    } else {
+      return null;
+    }
+  } catch (err) {
+    return null;
+  }
+}
+
+function platform(v: MaybeGemVersion): Platform | null {
+  try {
+    const version = GemVersion.create(v);
+    if (version.platform) {
+      return version.platform
     } else {
       return null;
     }
