@@ -66,11 +66,7 @@ workflows:
           context: nodejs-install
           matrix:
             parameters:
-              node-version: ['16.1.0']
-          filters:
-            branches:
-              ignore:
-                - master
+              node-version: ['16.1.0', '18.17.0', '20.5.0']
   release:
     jobs:
       - release:
