@@ -27,5 +27,11 @@ describe('test lt', () => {
     expect(lt('5.0.1-beta.3', '5.0.1-beta.1')).toBeFalsy();
     expect(lt('5.0.1-beta', '5.0.1-alpha')).toBeFalsy();
     expect(lt('5.0.1', '5.0.1.beta')).toBeFalsy();
-  })
+
+    // versions with recognised platform qualifiers
+    expect(lt('5.0.1-x86_64-linux', '5.0.1')).toBeFalsy();
+    expect(lt('5.0.1', '5.0.1-x86_64-linux')).toBeFalsy();
+    expect(lt('5.0.1-x86_64-linux', '5.0.1.beta')).toBeFalsy();
+    expect(lt('5.0.1.beta', '5.0.1-x86_64-linux')).toBeTruthy();
+  });
 });

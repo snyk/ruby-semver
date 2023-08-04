@@ -10,6 +10,9 @@ describe('test rcompare', () => {
     expect(rcompare('1.1.0.1', '1.1.0.1')).toBe(0);
     expect(rcompare('1.1.0.1-alpha', '1.1.0.1-alpha')).toBe(0);
     expect(rcompare('1.1.0.1-alpha.2', '1.1.0.1-alpha.2')).toBe(0);
+    expect(rcompare('1.1.0.1-java', '1.1.0.1-java')).toBe(0);
+    expect(rcompare('1.1.0.1-x86_64-darwin', '1.1.0.1-x86_64-darwin')).toBe(0);
+    expect(rcompare('1.1.0.1-x86_64-darwin', '1.1.0.1-java')).toBe(0);
   });
 
   it('rcompare(v1, v2): -1 if v1 > v2', () => {
@@ -19,6 +22,9 @@ describe('test rcompare', () => {
     expect(rcompare('1.1.0.2', '1.1.0.1')).toBe(-1);
     expect(rcompare('1.1.0.1-beta', '1.1.0.1-alpha')).toBe(-1);
     expect(rcompare('1.1.0.1-alpha.3', '1.1.0.1-alpha.2')).toBe(-1);
+    expect(rcompare('1.1.0.2-java', '1.1.0.1-java')).toBe(-1);
+    expect(rcompare('1.1.0.2-x86_64-darwin', '1.1.0.1-x86_64-darwin')).toBe(-1);
+    expect(rcompare('1.1.0.2-x86_64-darwin', '1.1.0.1-java')).toBe(-1);
   });
 
   it('rcompare(v1, v2): 1 if v1 < v2', () => {
@@ -28,5 +34,8 @@ describe('test rcompare', () => {
     expect(rcompare('1.1.0.1', '1.1.0.2')).toBe(1);
     expect(rcompare('1.1.0.1-alpha', '1.1.0.1-beta')).toBe(1);
     expect(rcompare('1.1.0.1-alpha.2', '1.1.0.1-alpha.3')).toBe(1);
-  })
+    expect(rcompare('1.1.0.1-java', '1.1.0.2-java')).toBe(1);
+    expect(rcompare('1.1.0.1-x86_64-darwin', '1.1.0.2-x86_64-darwin')).toBe(1);
+    expect(rcompare('1.1.0.1-x86_64-darwin', '1.1.0.2-java')).toBe(1);
+  });
 });

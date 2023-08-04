@@ -152,11 +152,26 @@ const VERSION_PATTERN =
   '[0-9]+(\\.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?';
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
+export const VALID_PLATFORM_QUALIFIERS = [
+  'x86_64-darwin',
+  'arm-linux',
+  'java',
+  'arm64-darwin',
+  'x86-mingw32',
+  'aarch64-linux',
+  'x64-mingw-ucrt',
+  'x86-linux',
+  'x64-mingw32',
+  'x86_64-linux',
+] as const; 
+
 export type MaybeGemVersion = GemVersion | string;
 export type Ordering = 1 | 0 | -1;
+export type Platform = typeof VALID_PLATFORM_QUALIFIERS[number];
 
 export class GemVersion {
   version: string;
+  platform?: Platform;
   _release?: GemVersion;
   _isPrerelease?: boolean;
   _bump?: GemVersion;
@@ -168,7 +183,7 @@ export class GemVersion {
   // -----------------------------
   // A string representation of this Version.
   toString(): string {
-    return this.version;
+    return this.platform ? `${this.version}-${this.platform as string}` : this.version;
   }
 
   // -----------------------------
@@ -210,6 +225,17 @@ export class GemVersion {
   // series of digits or ASCII letters separated by dots.
 
   constructor(version: string) {
+    const platform: Platform | undefined = VALID_PLATFORM_QUALIFIERS.find(
+      (platform) => {
+        return version.endsWith(`-${platform}`);
+      },
+    );
+
+    if (platform) {
+      this.platform = platform;
+      version = version.slice(0, -platform.length - 1);
+    }
+
     if (!GemVersion.isCorrect(version)) {
       throw new Error(`Malformed version number string ${version}`);
     }
