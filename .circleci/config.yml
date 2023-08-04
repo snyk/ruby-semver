@@ -67,10 +67,13 @@ workflows:
           matrix:
             parameters:
               node-version: ['16.1.0', '18.17.0', '20.5.0']
-  release:
-    jobs:
       - release:
           name: Release
+          requires:
+            - Scan repository for secrets
+            - Test Node 16.1.0
+            - Test Node 18.17.0
+            - Test Node 20.5.0
           context: nodejs-lib-release
           filters:
             branches:
