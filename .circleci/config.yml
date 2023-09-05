@@ -61,6 +61,10 @@ workflows:
           context:
             - snyk-bot-slack
           channel: os-team-managed-alerts
+          filters:
+            branches:
+              ignore:
+                - master
       - test:
           name: Test Node << matrix.node-version >>
           context: nodejs-install
