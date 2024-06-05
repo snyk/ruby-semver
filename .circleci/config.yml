@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  prodsec: snyk/prodsec-orb@1.0
+  prodsec: snyk/prodsec-orb@1
 
 executors:
   docker-node:
@@ -30,6 +30,23 @@ commands:
           command: npx semantic-release
 
 jobs:
+  security-scans:
+    resource_class: small
+    parameters:
+      node-version:
+        type: string
+    executor:
+      name: docker-node
+      version: << parameters.node-version >>
+    steps:
+      - checkout
+      - install
+      - prodsec/security_scans:
+          mode: auto
+          release-branch: master
+          open-source-additional-arguments: --exclude=test
+          iac-scan: disabled
+
   test:
     resource_class: small
     parameters:
@@ -65,6 +82,12 @@ workflows:
             branches:
               ignore:
                 - master
+
+      - security-scans:
+          name: Security Scans
+          context: open_source-managed
+          node-version: '20.5.0'
+
       - test:
           name: Test Node << matrix.node-version >>
           context: nodejs-install
