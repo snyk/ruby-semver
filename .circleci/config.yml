@@ -27,7 +27,9 @@ commands:
     steps:
       - run:
           name: Release
-          command: npx semantic-release
+          command: |
+            export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            npx semantic-release@25.0.3
 
 jobs:
   security-scans:
@@ -86,14 +88,14 @@ workflows:
       - security-scans:
           name: Security Scans
           context: open_source-managed
-          node-version: '20.5.0'
+          node-version: '24.16'
 
       - test:
           name: Test Node << matrix.node-version >>
           context: nodejs-install
           matrix:
             parameters:
-              node-version: ['16.1.0', '18.17.0', '20.5.0']
+              node-version: ['16.1.0', '18.17.0', '20.5.0', '22.23.1', '24.16.0']
       - release:
           name: Release
           requires:
@@ -101,7 +103,11 @@ workflows:
             - Test Node 16.1.0
             - Test Node 18.17.0
             - Test Node 20.5.0
-          context: nodejs-lib-release
+            - Test Node 22.23.1
+            - Test Node 24.16.0
+          context:
+            - nodejs-install
+            - github-release
           filters:
             branches:
               only:
