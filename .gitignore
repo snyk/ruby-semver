@@ -1,4 +1,7 @@
 node_modules/
 npm-debug.log
 dist/
+
+# IDEs
 /.idea/
+/.vscode/
