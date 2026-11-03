@@ -158,7 +158,7 @@ class GemVersion
   # Altered for JavaScript compatibility
   # VERSION_PATTERN = '[0-9]+(?>\.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?' # :nodoc:
   # ANCHORED_VERSION_PATTERN = /\A\s*(#{VERSION_PATTERN})?\s*\z/ # :nodoc:
-  VERSION_PATTERN = '[0-9]+(\.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?'
+  VERSION_PATTERN = '[0-9]+(\.[0-9a-zA-Z_]+)*(-[0-9A-Za-z_-]+(\.[0-9A-Za-z_-]+)*)?'
   ANCHORED_VERSION_PATTERN = /^\s*(#{GemVersion::VERSION_PATTERN})?\s*$/
 
 
