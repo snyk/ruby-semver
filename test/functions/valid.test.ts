@@ -22,4 +22,10 @@ describe('test valid', () => {
     expect(valid('1.13.10-x86_64-darwin')).toBe('1.13.10-x86_64-darwin');
     expect(valid('1.13.10-java')).toBe('1.13.10-java');
   });
+
+  it('valid(v) with platform qualifiers containing underscores (OSM-3773)', () => {
+    expect(valid('1.14.5-x86_64-linux')).toBe('1.14.5-x86_64-linux');
+    expect(valid('1.18.2-x86_64-linux')).toBe('1.18.2-x86_64-linux');
+    expect(valid('2.0.0-x86_64-darwin')).toBe('2.0.0-x86_64-darwin');
+  });
 });

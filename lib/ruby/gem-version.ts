@@ -149,7 +149,7 @@
 // a zero to give a sensible result.
 
 const VERSION_PATTERN =
-  '[0-9]+(\\.[0-9a-zA-Z]+)*(-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?';
+  '[0-9]+(\\.[0-9a-zA-Z_]+)*(-[0-9A-Za-z_-]+(\\.[0-9A-Za-z_-]+)*)?';
 const ANCHORED_VERSION_PATTERN = new RegExp(`^\\s*(${VERSION_PATTERN})?\\s*$`);
 
 export const VALID_PLATFORM_QUALIFIERS = [
