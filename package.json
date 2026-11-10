@@ -39,7 +39,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=22"
   },
   "dependencies": {
     "lodash.escaperegexp": "^4.1.0",
